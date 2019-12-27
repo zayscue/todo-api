@@ -1,14 +1,12 @@
+import { injectable } from 'inversify';
 import { RepositoryBase } from '../application/common/interfaces/repositoryBase';
 import { TodoItem } from '../domain/todoItem';
-import { v4 as uuid } from 'uuid';
+import { todoItems } from './todoItems';
 
+@injectable()
 export class TodoItemRepository implements RepositoryBase<TodoItem, string> {
     
-    private static todoItemStorage: TodoItem[] = [
-        new TodoItem(uuid(), 'Do laundry', true), 
-        new TodoItem(uuid(), 'Walk dog', false), 
-        new TodoItem(uuid(), 'Clean apartment', false)
-    ];
+    private static todoItemStorage: TodoItem[] = todoItems;
     
     get(id: string): Promise<TodoItem | undefined> {
         return new Promise<TodoItem | undefined>((resolve, reject) => {
