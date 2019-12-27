@@ -1,23 +1,14 @@
 import { container } from './iocContainer';
-import { RequestMediator } from './mediator';
-import { AddTodoItemCommand } from './application/todoItems/commands/addTodoItem/addTodoItemCommand';
-import { UpdateTodoItemCommand } from './application/todoItems/commands/updateTodoItem/updateTodoItemCommand';
-import { GetTodoItemsQuery } from './application/todoItems/queries/getTodoItems/getTodoItemsQuery';
-import { Request, RequestHandler } from './request';
-import { TodoItem } from './domain/todoItem';
+import { InversifyExpressServer } from "inversify-express-utils";
 
-const handlers = container.getAll<RequestHandler<Request<any>, any>>('RequestHandler');
-const mediator = new RequestMediator(handlers);
-const addCommand = new AddTodoItemCommand('Do my homework');
-const query = new GetTodoItemsQuery();
+(async () => {
 
-mediator.send(addCommand).then(response => {
-    printTodoItems();
-    const todoItem = response as TodoItem;
-    const updateCommand = new UpdateTodoItemCommand(todoItem.id, todoItem.description, true);
-    mediator.send(updateCommand).then(() => printTodoItems());
-});
+    const port = 3000;
+    const app = new InversifyExpressServer(container);
+    const server = app.build();
+    
+    server.listen(port, () => {
+        console.log(`Server running at http://127.0.0.1:${port}/`)
+    });
 
-const printTodoItems: Function = () => {
-    mediator.send(query).then(response => console.log(JSON.stringify(response)));
-};
+})();
