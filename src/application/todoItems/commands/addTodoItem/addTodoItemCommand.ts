@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 
 export class AddTodoItemCommand implements Request<TodoItem> {
     
-    description: string
+    description: string;
 
     constructor(description: string) {
         this.description = description;
