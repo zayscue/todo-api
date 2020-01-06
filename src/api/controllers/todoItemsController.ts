@@ -5,11 +5,12 @@ import {
     httpGet,
     httpPost,
     response,
-    requestParam,
-    requestBody
+    request
 } from 'inversify-express-utils';
+import { TodoItem } from '../../domain/todoItem';
 import { RequestMediator } from '../../mediator';
 import { GetTodoItemsQuery } from '../../application/todoItems/queries/getTodoItems/getTodoItemsQuery';
+import { AddTodoItemCommand } from '../../application/todoItems/commands/addTodoItem/addTodoItemCommand';
 
 @controller('/api/v1/todoItems')
 export class TodoItemsController {
@@ -21,8 +22,15 @@ export class TodoItemsController {
 
     @httpGet('/')
     public get(@response() res: express.Response) {
-        this._mediator.send(new GetTodoItemsQuery()).then(response => {
-            res.status(200).json(response);
+        return this._mediator.send(new GetTodoItemsQuery()).then(response => {
+            return res.status(200).json(response);
         });
     }
+
+    @httpPost('/')
+    public insert(@request() req: express.Request, @response() res: express.Response) {
+        return this._mediator.send(new AddTodoItemCommand(req.body.description)).then(response => {
+            return res.status(201).json(response);
+        });
+    } 
 }
