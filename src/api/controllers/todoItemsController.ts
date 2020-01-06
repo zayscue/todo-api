@@ -7,7 +7,6 @@ import {
     response,
     request
 } from 'inversify-express-utils';
-import { TodoItem } from '../../domain/todoItem';
 import { RequestMediator } from '../../mediator';
 import { GetTodoItemsQuery } from '../../application/todoItems/queries/getTodoItems/getTodoItemsQuery';
 import { AddTodoItemCommand } from '../../application/todoItems/commands/addTodoItem/addTodoItemCommand';
